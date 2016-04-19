@@ -1,0 +1,89 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from TestService2Service WSDL service -->
+
+  <service name="TestService2" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://service.axis2.com"/>
+      <parameter name="wsdlServiceElement" value="TestService2Service"/>
+      <parameter name="schemaQualified" value="http://service.axis2.com,http://daoTest,http://hibernate5.orm.springframework.org"/>
+      <parameter name="wsdlServicePort" value="TestService2"/>
+      <parameter name="className" value="com.axis2.service.TestService2SoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="TestService2"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="getTestDAO" qname="operNS:getTestDAO" xmlns:operNS="http://service.axis2.com" returnQName="retNS:getTestDAOReturn" xmlns:retNS="http://service.axis2.com" returnType="rtns:TestDAO" xmlns:rtns="http://daoTest" soapAction="" >
+      </operation>
+      <operation name="setTestDAO" qname="operNS:setTestDAO" xmlns:operNS="http://service.axis2.com" soapAction="" >
+        <parameter qname="pns:testDAO" xmlns:pns="http://service.axis2.com" type="tns:TestDAO" xmlns:tns="http://daoTest"/>
+      </operation>
+      <operation name="getusername" qname="operNS:getusername" xmlns:operNS="http://service.axis2.com" returnQName="retNS:getusernameReturn" xmlns:retNS="http://service.axis2.com" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://service.axis2.com" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="getusername getTestDAO setTestDAO"/>
+
+      <typeMapping
+        xmlns:ns="http://hibernate5.orm.springframework.org"
+        qname="ns:HibernateTemplate"
+        type="java:org.springframework.orm.hibernate5.HibernateTemplate"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://daoTest"
+        qname="ns:TestDAO"
+        type="java:daoTest.TestDAO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <arrayMapping
+        xmlns:ns="http://service.axis2.com"
+        qname="ns:ArrayOf_xsd_string"
+        type="java:java.lang.String[]"
+        innerType="cmp-ns:string" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://service.axis2.com"
+        qname="ns:>getusername"
+        type="java:com.axis2.service.Getusername"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://service.axis2.com"
+        qname="ns:>getusernameResponse"
+        type="java:com.axis2.service.GetusernameResponse"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://service.axis2.com"
+        qname="ns:>setTestDAO"
+        type="java:com.axis2.service.SetTestDAO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://service.axis2.com"
+        qname="ns:>setTestDAOResponse"
+        type="java:com.axis2.service.SetTestDAOResponse"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>
