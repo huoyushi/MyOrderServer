@@ -43,7 +43,6 @@ public class UserManagerImpl implements UserManager{
 	@Override
 	@Transactional
 	public String registerSeller(Seller seller) {
-		seller.setIsauthorize("Y");
 		producer.sendMessage(destination,seller);
 		if(userManagerDao.addSeller(seller))
 			return "getrequest";
@@ -77,6 +76,7 @@ public class UserManagerImpl implements UserManager{
 	}
 
 	@Override
+	@Transactional
 	public boolean authorize(String sellerid) {
 		return userManagerDao.authorize(sellerid);
 	}
