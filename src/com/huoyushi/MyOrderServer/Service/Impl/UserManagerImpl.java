@@ -17,6 +17,7 @@ import com.huoyushi.MyOrderServer.Entity.Seller;
 import com.huoyushi.MyOrderServer.Service.UserManager;
 import com.huoyushi.jms.RegisterConsumer;
 import com.huoyushi.jms.RegisterProducer;
+import com.huoyushi.util.ActiveMQListener;
 
 @Service("UserManagerService")
 public class UserManagerImpl implements UserManager{
@@ -51,13 +52,22 @@ public class UserManagerImpl implements UserManager{
 	}
 	
 	@Override
-	public List<Seller> getpendinglist(){
+	public List<Seller> getpendinglist(int flag) throws Exception{
 		List<Seller>userlist=new ArrayList<>();
-		for(int i=0;i<2;i++){
-			Seller user=consumer.Receive(destination);
-			System.out.println(user.getSellerid());
-			userlist.add(user);
+		long total=ActiveMQListener.getMessageNum();
+		long max=0;
+		if(total>5)
+		 max=5;
+		else {
+			max=total;
 		}
+		if(flag==1){if(total>1)max=1;else {
+			max=0;
+		}}
+			for(int i=0;i<max;i++){
+				Seller user=consumer.Receive(destination);
+				userlist.add(user);
+			}
 		return userlist;
 	}
 

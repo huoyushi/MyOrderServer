@@ -18,7 +18,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700' rel='stylesheet' type='text/css'>
 <script src="js/jquery.min.js"></script>
 <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen" />
- <script src="js/simpleCart.min.js"> </script>
+ <!--  <script src="js/simpleCart.min.js"> </script>-->
 </head>
 <body>
 <!-- header -->
@@ -44,12 +44,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</ul>
 								<!-- script-for-nav -->
 							<script>
-							$( "span.menu" ).click(function() {
-								var price=
-								  $( ".head-nav ul" ).slideToggle(300, function() {
-									// Animation complete.
-								  });
-								});
+				
+								   
+						
 							</script>
 						<!-- script-for-nav --> 
 					</div>
@@ -69,39 +66,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</div>
 <!-- header -->
 <!-- about -->
-<div class="orders">
-	<div class="container">
-		<div class="order-top">
-			<li class="data"><h4>菜品</h4>
-			<% List<Menu> menus= (List<Menu>)session.getAttribute("menulist");
-             %>
-             <%
-		    for(Menu menu:menus) {
-		      %>
-				<p><%=menu.getMname()%></p>
-				<% } %>
-			</li>
-			<li class="data">
-				<div class="special-info grid_1 simpleCart_shelfItem">
-					<h4>Price</h4>
-					<%for(Menu menu:menus){ %>
-					<div class="pre-top">
-						<div class="pr-left">
-							<div class="item_price"><span class="item_price"><h6><%=menu.getPrice() %></h6></span></div>
-						</div>
-						<div class="pr-right">
-							<div class="item_add"><span class="item_add"><a href="#">选择</a></span></div>
-						</div>
-							<div class="clearfix"></div>
-					</div>
-					<%} %>
-					
-					</div>
-				</li>
-			<div class="clearfix"></div>
-		</div>
-	</div>
-</div>
+<table id="menus" class="table table-striped  table-hover">
+    	<tr>
+			<td>OrderID</td>
+			<td>customerName</td>
+			<td>customername</td>
+		</tr>
+		    
+<% List<Order> orders= (List<Order>)session.getAttribute("orderlist");
+%>
+		<%
+		if(orders!=null)for(Order order:orders) {
+		%>
+			<tr>
+			<td><%=order.getId()%></td>
+			<td><%=order.getCustomer().getCustomerid() %></td>
+			<td><%=order.getCustomer().getUname() %></td>
+		   </tr>
+		   <%} %>
+    </table>
 <!-- about -->	
 
 </body>

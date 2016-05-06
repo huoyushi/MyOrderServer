@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,7 +28,7 @@ public class Seller implements Serializable{
 	private String identitynum;
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Menu> menulist;
-	@OneToMany(cascade = CascadeType.ALL,mappedBy="seller")
+	@OneToMany(cascade = CascadeType.ALL,mappedBy="seller",fetch=FetchType.EAGER)
 	List<Order>orders=new ArrayList<>();
 	String isauthorize;
 	
@@ -49,7 +50,6 @@ public class Seller implements Serializable{
 		this.orders = orders;
 		this.isauthorize = isauthorize;
 	}
-   @JsonIgnore
 	public List<Order> getList() {
 		return orders;
 	}
@@ -90,14 +90,12 @@ public class Seller implements Serializable{
 	public void setIdentitynum(String identitynum) {
 		this.identitynum = identitynum;
 	}
-	@JsonIgnore
 	public List<Menu> getMenulist() {
 		return menulist;
 	}
 	public void setMenulist(List<Menu> menulist) {
 		this.menulist = menulist;
 	}
-	@JsonIgnore
 	public List<Order> getOrders() {
 		return orders;
 	}
@@ -119,8 +117,6 @@ public class Seller implements Serializable{
 		return "{\"sellerid\":\"" + sellerid + "\",\"uname\":\"" + uname + "\",\"psd\":\"" + psd + "\",\"email\":\"" + email
 				+ "\",\"identitynum\":\"" + identitynum + "\",\"isauthorize\":\"" + isauthorize + "\"}";
 	}
-
-
 
 
 }

@@ -1,10 +1,12 @@
 package com.huoyushi.MyOrderServer.DAO.Impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
 
@@ -16,6 +18,7 @@ import com.huoyushi.MyOrderServer.DAO.OrderManagerDAO;
 import com.huoyushi.MyOrderServer.Entity.Customer;
 import com.huoyushi.MyOrderServer.Entity.Menu;
 import com.huoyushi.MyOrderServer.Entity.Order;
+import com.huoyushi.MyOrderServer.Entity.Order_Menu;
 import com.huoyushi.MyOrderServer.Entity.Seller;
 
 @Repository("OrderManagerDAO")
@@ -26,21 +29,24 @@ public class OrderManagerDAOImpl implements OrderManagerDAO{
 	public String addOrder(Order order) {
 		System.out.println(order.getCustomer().getCustomerid());
 		em.persist(order);
-		return order.getId();
+		return order.getOrderid();
 	}
 
 	@Override
 	public List<Order> getorderlist(String sellrid,int flag) {
 		Seller seller=em.find(Seller.class, sellrid);
 		String jpql="select order from  Order order where order.seller=:seller and order.flag=:flag";
-	    
+	    System.out.println(seller.getUname());
 		 List<Order> orderlist=em.createQuery(jpql)
 					.setParameter("seller", seller)
 					.setParameter("flag",flag)
 					.getResultList();
 			if(orderlist.isEmpty()) return null;
 			for (Order order : orderlist) {
+				System.out.println("hhorderlist");
+				System.out.println(order.getCustomer().getCustomerid());
 				Customer customer=em.find(Customer.class, order.getCustomer().getCustomerid());
+				System.out.println(customer.getUname());
 				order.setCustomer(customer);	
 			}
 			return orderlist;
@@ -74,21 +80,14 @@ public class OrderManagerDAOImpl implements OrderManagerDAO{
 	}
 
 	@Override
-	public List<Menu> getorderdetails(String orderid) {
-	
-		Order order=em.find(Order.class, orderid);
+	public Set<Order_Menu> getorderdetails(String orderid) {
+	   Set<Order_Menu>menus=new HashSet<>();
+	   Order order=em.find(Order.class, orderid);
 		if(order!=null){
 			System.out.println("here");
 			System.out.println(order.getCustomer().getCustomerid());
-			List<Menu>menus=order.getMenus();
-			if(menus!=null)
-			{
-			for (Menu menu : menus) {
-				System.out.println(menu.getMname());
-				
-			}
-			}
-			return order.getMenus();
+			menus=order.getOrdermenus();
+			return menus;
 		
 	}
 		return null;

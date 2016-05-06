@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,7 +26,7 @@ public class Customer implements Serializable{
 	private String uname;
 	private String psd;
 	private String email;
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer",fetch=FetchType.EAGER)
 	private List<Order>orders=new ArrayList<>();
 	public Customer() {
 		super();
@@ -77,5 +78,11 @@ public class Customer implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	@Override
+	public String toString() {
+		return "{\"customerid\":\"" + customerid + "\",\"uname\":\"" + uname + "\",\"psd\":\"" + psd + "\",\"email\":\""
+				+ email + "\"}";
+	}
+	
 	
 }

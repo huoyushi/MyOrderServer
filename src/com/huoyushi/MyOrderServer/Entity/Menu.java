@@ -1,19 +1,27 @@
 package com.huoyushi.MyOrderServer.Entity;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.alibaba.fastjson.util.Base64;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.mail.util.BASE64EncoderStream;
 
 @Entity
 @Table(name="menus")
@@ -31,13 +39,19 @@ public class Menu implements Serializable{
 	float price;
 	String mname;
 	String description;
-	String pic;
+	@Transient
+	String  pic;
+	@Lob 
+	@Basic(fetch=FetchType.LAZY) 
+	@Column(columnDefinition="BLOB")
+	private byte[] picblob; 
 	public Menu() {
 		// TODO Auto-generated constructor stub
 	}
+	
 
-
-	public Menu(Integer menuid, Seller seller, float price, String mname, String description, String pic) {
+	public Menu(Integer menuid, Seller seller, float price, String mname, String description, String pic,
+			byte[] picblob) {
 		super();
 		this.menuid = menuid;
 		this.seller = seller;
@@ -45,7 +59,26 @@ public class Menu implements Serializable{
 		this.mname = mname;
 		this.description = description;
 		this.pic = pic;
-		
+		this.picblob = picblob;
+	}
+
+	public String getPic() {
+		return pic;
+	}
+
+
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+
+   @JsonIgnore
+	public byte[] getPicblob() {
+		return picblob;
+	}
+
+   @JsonIgnore
+	public void setPicblob(byte[] picblob) {
+		this.picblob = picblob;
 	}
 
 
@@ -58,15 +91,6 @@ public class Menu implements Serializable{
 		this.menuid = menuid;
 	}
 
-
-	public String getPic() {
-		return pic;
-	}
-
-
-	public void setPic(String pic) {
-		this.pic = pic;
-	}
 
 
 	public Seller getSeller() {
@@ -94,12 +118,17 @@ public class Menu implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-
+	@SuppressWarnings("restriction")
+	public String byte2String(){
+		return new sun.misc.BASE64Encoder().encode(this.picblob);
+	}
+	public void string2byte() throws IOException{
+		 this.picblob=new sun.misc.BASE64Decoder().decodeBuffer(this.pic);
+	} 
 	@Override
 	public String toString() {
-		return "{\"menuid\":\"" + menuid + "\",\"price\":\"" + price + "\",\"mname\":\"" + mname + "\",\"description\":\""
-				+ description + "\",\"pic\":\"" + pic + "\"}";
+		return "{\"menuid\":\"" + menuid + "\",\"price\":\"" + price + "\",\"mname\":\"" + mname
+				+ "\",\"description\":\"" + description + "\",\"pic\":\"" + byte2String() + "\"}";
 	}
 	
 }

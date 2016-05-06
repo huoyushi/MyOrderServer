@@ -20,9 +20,11 @@ public class MenuManagerDAOImpl implements MenuManagerDAO{
 	@Override
 	public boolean addMenu(Menu menu) {
 		try {
+			System.out.println("addmenu");
 			em.persist(menu);
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

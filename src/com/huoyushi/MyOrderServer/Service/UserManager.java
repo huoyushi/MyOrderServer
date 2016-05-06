@@ -9,7 +9,7 @@ public interface UserManager {
 	public Object login(String id,String psd,int groupid);
 	public String registerCustomer(Customer customer);
 	public String registerSeller(Seller seller);
-	public List<Seller> getpendinglist();
+	public List<Seller> getpendinglist(int flag) throws Exception;
 	public List<Seller> getSellers();
 	public boolean authorize(String sellerid);
 }

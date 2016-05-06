@@ -1,19 +1,23 @@
 package com.huoyushi.MyOrderServer.Entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
+
 
 @Entity
 @Table(name="orders")
@@ -23,36 +27,43 @@ public class Order implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	private String id;
-	@OneToOne
+	private String orderid;
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="customerid")
 	Customer customer;
 	@OneToOne
 	@JoinColumn(name="sellerid")
 	Seller seller;
-	@OneToMany
-	List<Menu>menus=new ArrayList<>();
+	@OneToMany(fetch=FetchType.EAGER,mappedBy="order",cascade=CascadeType.ALL)
+	private Set<Order_Menu>ordermenus=new HashSet<>();
 	int flag;
-	
-	
 	public Order() {
 		super();
 	}
 
-	public Order(String id, Customer customer, Seller seller, List<Menu> menus, int flag) {
+  
+
+	public Order(String orderid, Customer customer, Seller seller, Set<Order_Menu> ordermenus, int flag) {
 		super();
-		this.id = id;
+		this.orderid = orderid;
 		this.customer = customer;
 		this.seller = seller;
-		this.menus = menus;
+		this.ordermenus = ordermenus;
 		this.flag = flag;
 	}
-
-	public String getId() {
-		return id;
+	 @JsonIgnore
+	public Set<Order_Menu> getOrdermenus() {
+		return ordermenus;
 	}
-	public void setId(String id) {
-		this.id = id;
+  
+	public void setOrdermenus(Set<Order_Menu> ordermenus) {
+		this.ordermenus = ordermenus;
+	}
+	public String getOrderid() {
+		return orderid;
+	}
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
 	}
 	public Customer getCustomer() {
 		return customer;
@@ -71,21 +82,17 @@ public class Order implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-    @JsonIgnore
-   
-     public List<Menu> getMenus() {
-		return menus;
-	}
-
-	public void setMenus(List<Menu> menus) {
-		this.menus = menus;
-	}
-
 	public int getFlag() {
 		return flag;
 	}
 	public void setFlag(int flag) {
 		this.flag = flag;
 	}
+
+	@Override
+	public String toString() {
+		return "{\"orderid\":\"" + orderid + "\",\"customer\":" + customer.toString() + ",\"flag\":\"" + flag + "\"}";
+	}
+	
 	
 }

@@ -1,6 +1,7 @@
 package com.huoyushi.MyOrderServer.Service.Impl;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.jms.Destination;
 import javax.persistence.Transient;
@@ -16,6 +17,7 @@ import com.huoyushi.MyOrderServer.DAO.UserManagerDAO;
 import com.huoyushi.MyOrderServer.Entity.Customer;
 import com.huoyushi.MyOrderServer.Entity.Menu;
 import com.huoyushi.MyOrderServer.Entity.Order;
+import com.huoyushi.MyOrderServer.Entity.Order_Menu;
 import com.huoyushi.MyOrderServer.Entity.Seller;
 import com.huoyushi.MyOrderServer.Service.OrderManager;
 import com.huoyushi.jms.OrderProducer;
@@ -40,8 +42,13 @@ public class OrderManagerImpl implements OrderManager{
 		order.setFlag(0);
 		String id=UUIDUtil.generateuuid();
 		System.out.println(id);
-		order.setId(id);
+		order.setOrderid(id);
 		
+		Set<Order_Menu>order_Menus=order.getOrdermenus();
+		for (Order_Menu order_Menu : order_Menus) {
+			order_Menu.setOrder(order);
+		}
+		order.setOrdermenus(order_Menus);
 		Seller seller=userManagerDAO.findSellerbyID(order.getSeller().getSellerid());
 		seller.getOrders().add(order);
 		order.setSeller(seller);
@@ -49,9 +56,9 @@ public class OrderManagerImpl implements OrderManager{
 		Customer customer=userManagerDAO.finCustomerbyID(order.getCustomer().getCustomerid());
 		customer.getOrders().add(order);
 		order.setCustomer(customer);
-		//producer.sendMessage(destination, order);
+		producer.sendMessage(destination, order);
 		// TODO Auto-generated method stub
-		return orderManagerDAO.addOrder(order);
+		return id;
 		
 	}
 	@Override
@@ -69,7 +76,7 @@ public class OrderManagerImpl implements OrderManager{
 		return orderManagerDAO.getorderflag(orderid);
 	}
 	@Override
-	public List<Menu> orderdetails(String orderid) {
+	public Set<Order_Menu> orderdetails(String orderid) {
 		// TODO Auto-generated method stub
 		return orderManagerDAO.getorderdetails(orderid);
 	}

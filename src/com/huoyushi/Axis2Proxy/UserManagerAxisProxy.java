@@ -81,9 +81,9 @@ public class UserManagerAxisProxy {
 		return userManager.registerSeller(seller1);
 		}
 	
-	public String getPendinglist() throws IOException{
+	public String getPendinglist(int flag) throws Exception{
 		System.out.println("qingqiu");
-		String pendinglist=SerializeTools.list2Json(userManager.getpendinglist(),1);
+		String pendinglist=SerializeTools.list2Json(userManager.getpendinglist(flag),1);
 		if(pendinglist==null||pendinglist.isEmpty())
 			return "empty";
 		return pendinglist;
@@ -99,6 +99,7 @@ public class UserManagerAxisProxy {
 		return string;
 	}
 	public String authorize(String sellerid) {
+		
 		if(userManager.authorize(sellerid))
 			return "success";
 		return "error";

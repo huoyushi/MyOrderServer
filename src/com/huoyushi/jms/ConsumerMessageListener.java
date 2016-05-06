@@ -7,7 +7,6 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.huoyushi.MyOrderServer.DAO.MenuManagerDAO;
 import com.huoyushi.MyOrderServer.DAO.OrderManagerDAO;
@@ -41,8 +40,7 @@ public class ConsumerMessageListener implements MessageListener {
 			customer.getOrders().add(order);
 			order.setCustomer(customer);
 			System.out.println("消息内容是：" + order.getSeller().getSellerid());
-			
-			  orderManagerDAO.addOrder(order);
+			orderManagerDAO.addOrder(order);
 		} catch (JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

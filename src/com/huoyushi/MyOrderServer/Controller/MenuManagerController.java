@@ -20,7 +20,7 @@ public class MenuManagerController {
 	public String  getSellerlist(String sellerid, HttpSession session){
 		List<Menu> list=menuManager.findMenulist(sellerid);
 		session.setAttribute("menulist", list);
-		return "orders";
+		return "orders2";
 	}
 
 }

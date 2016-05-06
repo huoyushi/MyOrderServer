@@ -47,10 +47,11 @@ public class UserManagerDAOImpl implements UserManagerDAO {
 	@Override
 	public Seller findSeller(String id, String psd) {
 	
-			 String jpql="select seller from  Seller seller where seller.sellerid=:id and seller.psd=:psd";
+			 String jpql="select seller from  Seller seller where seller.sellerid=:id and seller.psd=:psd and seller.isauthorize=:isau";
 			 List<Seller> sellers=em.createQuery(jpql)
 						.setParameter("id", id)
 						.setParameter("psd", psd)
+						.setParameter("isau", "Y")
 						.getResultList();
 				if(sellers.isEmpty()) return null;
 				else return sellers.get(0);

@@ -17,6 +17,8 @@ import com.huoyushi.MyOrderServer.Entity.*;
 public class UserManagerController {
 	@Autowired(required=true)
 	private  UserManager userManager;
+	@Autowired(required=true)
+	private  OrderManager orderManager;
 	@RequestMapping("/test11")
 	@ResponseBody
 	public Customer test11(Customer s1){
@@ -28,8 +30,25 @@ public class UserManagerController {
 		return s;
 	}
 	@RequestMapping("/stuLogin")
-	public String login(String MOBILENUMBER,String PASSWORD,HttpServletRequest request,HttpSession session){
+	public String login(String MOBILENUMBER,String PASSWORD,String groupid,HttpServletRequest request,HttpSession session){
 		System.out.println(PASSWORD+MOBILENUMBER);
+		if(groupid.equals("1"))
+		{
+		Seller seller=(Seller) userManager.login(MOBILENUMBER, PASSWORD, 1);
+		System.out.println(seller.getSellerid());
+		//Student s=sm.login(MOBILENUMBER, PASSWORD);
+		if(seller!=null){
+			List<Order> list=orderManager.getOrderlist(seller.getSellerid(), 0);
+			session.setAttribute("seller", seller);
+			session.setAttribute("orders", list);
+			return "getorders";
+		}
+		
+			return "redirect:login.html";
+	
+		}
+		if(groupid.equals("2"))
+		{
 		Customer customer=(Customer) userManager.login(MOBILENUMBER, PASSWORD, 2);
 		System.out.println(customer.getCustomerid());
 		//Student s=sm.login(MOBILENUMBER, PASSWORD);
@@ -46,8 +65,12 @@ public class UserManagerController {
 			return "resturants";
 		}
 		else{
-			return "redirect:login.html";
+				return "redirect:login.html";
+			}
 		}
+		
+		
+		return "redirect:login.html";
 		
 		
 	}

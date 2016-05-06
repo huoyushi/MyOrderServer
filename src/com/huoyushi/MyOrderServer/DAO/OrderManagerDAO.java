@@ -1,9 +1,9 @@
 package com.huoyushi.MyOrderServer.DAO;
 
 import java.util.List;
-
-import com.huoyushi.MyOrderServer.Entity.Menu;
+import java.util.Set;
 import com.huoyushi.MyOrderServer.Entity.Order;
+import com.huoyushi.MyOrderServer.Entity.Order_Menu;
 
 
 public interface OrderManagerDAO {
@@ -11,5 +11,5 @@ public interface OrderManagerDAO {
 	public List<Order> getorderlist(String sellrid,int flag);
 	public boolean setorderFlag(String orderid);
 	public boolean getorderflag(String orderid);
-	public List<Menu>getorderdetails(String orderid);
+	public Set<Order_Menu>getorderdetails(String orderid);
 }

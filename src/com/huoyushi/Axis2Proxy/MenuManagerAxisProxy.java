@@ -23,7 +23,8 @@ public class MenuManagerAxisProxy {
 		try {
 			 System.out.println(menu);
 			menu2 = (Menu)SerializeTools.json2Object(menu, Menu.class);
-			System.out.println(menu2.getSeller().getSellerid());
+			menu2.setMenuid(null);
+			menu2.string2byte();
 			if(menuManager.addMenu(menu2))
 				return "success";
 			
@@ -37,7 +38,7 @@ public class MenuManagerAxisProxy {
 	public String getMenulist(String sellerid) throws JsonParseException, JsonMappingException, IOException{
 		if(menuManager.findMenulist(sellerid)==null)
 			return "empty";
-		String string=SerializeTools.list2Json(menuManager.findMenulist(sellerid), 3);
+		String string=SerializeTools.list2Json(menuManager.findMenulist(sellerid), 4);
 		System.out.println(string);
 		return string;
 	}
